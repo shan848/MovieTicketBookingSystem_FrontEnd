@@ -16,6 +16,7 @@ export class RegisterComponent {
   email = '';
   password = '';
   age=0;
+  mobileNo='';
   error = '';
 
   constructor(
@@ -25,7 +26,7 @@ export class RegisterComponent {
 
   onSubmit() {
     this.error = '';
-    this.authService.register(this.email, this.password, this.name).subscribe({
+    this.authService.register(this.email, this.password, this.name,this.age,this.mobileNo).subscribe({
       next: () => this.router.navigate(['/']),
       error: (err) => this.error = err.message
     });
