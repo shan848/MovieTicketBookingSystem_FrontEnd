@@ -6,8 +6,8 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  age:number;
-  mobileNo:string;
+  age: number;
+  mobileNo: string;
 }
 
 @Injectable({
@@ -15,20 +15,12 @@ export interface User {
 })
 export class UserService {
 
-  constructor(private http:HttpClient) { }
-  private currentUser: User | null = null;
-private baseUrl='http://localhost:8080/api'
-  login(email: string, password: string): Observable<User> {
+  constructor(private http: HttpClient) { }
+  public currentUser: User | null = null;
+  private baseUrl = 'http://localhost:8080/api'
+  login(email: string, password: string) {
     // Simulate API call
-    this.http.post(this.baseUrl+'/login',{email,password}).subscribe(
-      (response:any) => {
-        console.log('Data:', response);
-        this.currentUser = response.user;
-      },
-      (error) => {
-        console.error('Error:', error);
-      }
-    );
+    return this.http.post(this.baseUrl + '/login', { email, password })
     // if (email === 'shan@gmail.com' && password === 'Password123!') {
     //   this.currentUser = { id: 1, email, name: 'Demo User',age:24,mobileNo:'8798780' };
     //   return of(this.currentUser);
@@ -36,21 +28,14 @@ private baseUrl='http://localhost:8080/api'
     return throwError(() => new Error('Invalid credentials'));
   }
 
-  register(email: string, password: string, name: string,age:number,mobileNo:string): Observable<User> {
+  register(email: string, password: string, name: string, age: number, mobileNo: string) {
     // Simulate API call
     // if (email && password && name & age & mobileNo) {
     //   this.currentUser = { id: 1, email, name };
     //   return of(this.currentUser);
     // }
-    this.http.post(this.baseUrl+'/registerUser',{email, password, name,age,mobileNo}).subscribe(
-      (response:any) => {
-        console.log('Data:', response);
-        this.currentUser = response.user;
-      },
-      (error) => {
-        console.error('Error:', error);
-      }
-    );
+    return this.http.post(this.baseUrl + '/registerUser', { email, password, name, age, mobileNo })
+
     return throwError(() => new Error('Registration failed'));
   }
 

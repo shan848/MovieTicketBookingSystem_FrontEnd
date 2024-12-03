@@ -18,12 +18,16 @@ export class LoginComponent {
   constructor(
     private authService: UserService,
     private router: Router
-  ) {}
+  ) { }
 
   onSubmit() {
     this.error = '';
     this.authService.login(this.email, this.password).subscribe({
-      next: () => this.router.navigate(['/']),
+      next: (res: any) => {
+        this.authService.currentUser = res.user;
+        alert("Loggedin successfully!!");
+        this.router.navigate(['/']);
+      },
       error: (err) => this.error = err.message
     });
   }

@@ -15,20 +15,27 @@ export class RegisterComponent {
   name = '';
   email = '';
   password = '';
-  age=0;
-  mobileNo='';
+  age = 0;
+  mobileNo = '';
   error = '';
 
   constructor(
     private authService: UserService,
     private router: Router
-  ) {}
+  ) { }
 
   onSubmit() {
     this.error = '';
-    this.authService.register(this.email, this.password, this.name,this.age,this.mobileNo).subscribe({
-      next: () => this.router.navigate(['/']),
-      error: (err) => this.error = err.message
+    this.authService.register(this.email, this.password, this.name, this.age, this.mobileNo).subscribe({
+
+      next: () => {
+        alert("Registered successfully");
+        this.router.navigate(['/login'])
+      },
+      error: (err) => {
+        this.error = err.message;
+        alert(this.error);
+      }
     });
   }
 }

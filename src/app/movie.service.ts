@@ -1,9 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 export interface Movie {
-  id: number;
-  title: string;
+  id?: number;
+  movieName: string;
   genre: string;
   rating: string;
   imageUrl: string;
@@ -19,11 +20,12 @@ export interface Movie {
 })
 export class MovieService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+  private baseUrl = 'http://localhost:8080/api'
   private movies: Movie[] = [
     {
       id: 1,
-      title: 'Inception',
+      movieName: 'Inception',
       genre: 'Sci-Fi',
       rating: 'PG-13',
       imageUrl: 'https://picsum.photos/300/400',
@@ -35,7 +37,7 @@ export class MovieService {
     },
     {
       id: 2,
-      title: 'The Dark Knight',
+      movieName: 'The Dark Knight',
       genre: 'Action',
       rating: 'PG-13',
       imageUrl: 'https://picsum.photos/300/400',
@@ -47,7 +49,7 @@ export class MovieService {
     },
     {
       id: 3,
-      title: 'Pulp Fiction',
+      movieName: 'Pulp Fiction',
       genre: 'Crime',
       rating: 'R',
       imageUrl: 'https://picsum.photos/300/400',
@@ -59,8 +61,21 @@ export class MovieService {
     }
   ];
 
-  getMovies(): Observable<Movie[]> {
-    return of(this.movies);
+  addMovie(newMovieData: Movie) {
+    return this.http.post(this.baseUrl + '/addMovie', newMovieData);
+  }
+  getMovies() {
+    return this.http.get(this.baseUrl + '/movies');
+  }
+  getMovieById(id: number) {
+    return this.http.get(this.baseUrl + `/getMovieById/${id}`);
+  }
+
+  updateMovie(id: number, updatedMovieData: Movie) {
+    return this.http.put(this.baseUrl + `/updateMovie/${id}`, updatedMovieData);
+  }
+  deleteMovie(id: number) {
+    return this.http.delete(this.baseUrl + `/deleteMovie/${id}`);
   }
 
   getFeaturedMovies(): Observable<Movie[]> {
