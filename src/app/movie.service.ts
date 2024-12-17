@@ -78,11 +78,15 @@ export class MovieService {
     return this.http.delete(this.baseUrl + `/deleteMovie/${id}`);
   }
 
-  getFeaturedMovies(): Observable<Movie[]> {
-    return of(this.movies.filter(movie => movie.featured));
-  }
+  // getFeaturedMovies(): Observable<Movie[]> {
+  //   return of(this.movies.filter(movie => movie.featured));
+  // }
 
-  getMovie(id: number): Observable<Movie | undefined> {
-    return of(this.movies.find(movie => movie.id === id));
+  // getMovie(id: number): Observable<Movie | undefined> {
+  //   return of(this.movies.find(movie => movie.id === id));
+  // }
+  getMovieImage() {
+
+    return 'https://picsum.photos/300/400';
   }
 }

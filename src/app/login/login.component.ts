@@ -14,17 +14,18 @@ export class LoginComponent {
   email = '';
   password = '';
   error = '';
-
   constructor(
     private authService: UserService,
     private router: Router
   ) { }
 
+ 
   onSubmit() {
     this.error = '';
     this.authService.login(this.email, this.password).subscribe({
       next: (res: any) => {
-        this.authService.currentUser = res.user;
+        // this.authService.currentUser = res.user;
+        localStorage.setItem('loggedIn',JSON.stringify(res.user));
         alert("Loggedin successfully!!");
         this.router.navigate(['/']);
       },

@@ -8,6 +8,10 @@ import { MovieManagementComponent } from './movie-management/movie-management.co
 import { MoviesListComponent } from './movies-list/movies-list.component';
 import { AddEditMovieComponent } from './add-edit-movie/add-edit-movie.component';
 import { ShiwtimesSeatSelectionComponent } from './shiwtimes-seat-selection/shiwtimes-seat-selection.component';
+import { ShowtimeManagementComponent } from './showtime-management/showtime-management.component';
+import { AddEditShowComponent } from './add-edit-show/add-edit-show.component';
+import { PaymentComponent } from './payment/payment.component';
+import { BookingsComponent } from './bookings/bookings.component';
 
 export const routes = [
   { path: '', component: HomeComponent },
@@ -20,4 +24,9 @@ export const routes = [
   { path: 'add-movie', component: AddEditMovieComponent },
   { path: 'edit-movie/:id', component: AddEditMovieComponent },
   { path: 'booking/:id', component: ShiwtimesSeatSelectionComponent },
+  { path: 'manage-shows/:id', component: ShowtimeManagementComponent },
+  { path: 'add-show/:movieId', component: AddEditShowComponent },
+  { path: 'edit-show/:movieId/:id', component: AddEditShowComponent },
+  { path: 'payment', component: PaymentComponent },
+  { path: 'bookings', component: BookingsComponent },
 ];

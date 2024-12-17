@@ -4,19 +4,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MovieService } from '../movie.service';
 import { BookingService, Seat, ShowTime } from '../booking.service'
+import { ShowService } from '../show.service';
 
 
 @Component({
   selector: 'app-shiwtimes-seat-selection',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './shiwtimes-seat-selection.component.html',
   styleUrl: './shiwtimes-seat-selection.component.scss'
 })
 export class ShiwtimesSeatSelectionComponent {
 
   movie: any;
-  showTimes: ShowTime[] = [];
+  showTimes: any = [];
   seats: Seat[] = [];
   selectedShowTime?: ShowTime;
   selectedSeats: Seat[] = [];
@@ -25,7 +26,8 @@ export class ShiwtimesSeatSelectionComponent {
     private route: ActivatedRoute,
     private router: Router,
     private movieService: MovieService,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private showService: ShowService
   ) { }
 
   ngOnInit() {
@@ -37,7 +39,7 @@ export class ShiwtimesSeatSelectionComponent {
   }
 
   loadShowTimes(movieId: number) {
-    this.bookingService.getShowTimes(movieId).subscribe(times => {
+    this.showService.getShowTimes(movieId).subscribe(times => {
       this.showTimes = times;
     });
   }
@@ -45,17 +47,21 @@ export class ShiwtimesSeatSelectionComponent {
   selectShowTime(time: ShowTime) {
     this.selectedShowTime = time;
     this.selectedSeats = [];
-    this.bookingService.getSeats(time.id).subscribe(seats => {
+    this.bookingService.getSeats(time.id).subscribe((seats: any) => {
+      seats.forEach((e: any) => {
+        e.price = 100;
+      })
       this.seats = seats;
+      return;
     });
   }
 
   getRows(): string[] {
-    return [...new Set(this.seats.map(seat => seat.row))];
+    return [...new Set(this.seats.map((seat: any) => seat.seatType))];
   }
 
   getSeatsInRow(row: string): Seat[] {
-    return this.seats.filter(seat => seat.row === row);
+    return this.seats.filter((seat: any) => seat.seatType === row);
   }
 
   toggleSeat(seat: Seat) {
@@ -70,14 +76,14 @@ export class ShiwtimesSeatSelectionComponent {
   }
 
   getSeatColor(seat: Seat): string {
-    if (seat.status === 'booked') return '#9e9e9e';
+    if (!seat.isAvailable) return '#9e9e9e';
     if (this.selectedSeats.some(s => s.id === seat.id)) return 'var(--primary)';
     return '#e0e0e0';
   }
 
   getSelectedSeatsText(): string {
     return this.selectedSeats
-      .map(seat => seat.row + seat.number)
+      .map((seat: any) => seat.seatType + seat.seatNo)
       .join(', ');
   }
 
@@ -85,12 +91,20 @@ export class ShiwtimesSeatSelectionComponent {
     return this.selectedSeats.reduce((total, seat) => total + seat.price, 0);
   }
 
+  getSelectedSeatsIds(): string {
+    const ids: any = [];
+    this.selectedSeats.forEach((e: any) => {
+      ids.push(e.id);
+    })
+    return ids.toString();
+  }
   proceedToPayment() {
+
     this.router.navigate(['/payment'], {
       state: {
         movieId: this.movie.id,
         showtimeId: this.selectedShowTime?.id,
-        seats: this.selectedSeats,
+        seats: this.getSelectedSeatsIds(),
         amount: this.getTotalAmount()
       }
     });

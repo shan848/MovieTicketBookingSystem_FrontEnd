@@ -1,12 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 export interface Seat {
-  id: string;
+  id: number;
   row: string;
   number: number;
   price: number;
   status: 'available' | 'selected' | 'booked';
+  seatNo: string,
+  isAvailable: boolean;
 }
 
 export interface ShowTime {
@@ -21,36 +24,21 @@ export interface ShowTime {
 })
 export class BookingService {
 
-  generateSeats(): Seat[] {
-    const seats: Seat[] = [];
-    const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  constructor(private http: HttpClient) { }
+  private baseUrl = 'http://localhost:8080/api';
 
-    rows.forEach(row => {
-      for (let i = 1; i <= 10; i++) {
-        seats.push({
-          id: `${row}${i}`,
-          row,
-          number: i,
-          price: row < 'D' ? 150 : 100,
-          status: Math.random() > 0.8 ? 'booked' : 'available'
-        });
-      }
-    });
 
-    return seats;
+
+
+  getShowTimes(movieId: number) {
+    return this.http.get(this.baseUrl + `/getAllShowsByMovieId/${movieId}`);
   }
 
-  getShowTimes(movieId: number): Observable<ShowTime[]> {
-    const times = [
-      { id: 1, time: '10:00 AM', date: '2024-01-20' },
-      { id: 2, time: '2:30 PM', date: '2024-01-20' },
-      { id: 3, time: '6:00 PM', date: '2024-01-20' },
-      { id: 4, time: '9:30 PM', date: '2024-01-20' }
-    ];
-    return of(times);
+  getSeats(showtimeId: number) {
+    return this.http.get(this.baseUrl + `/getAllSeatsByShowId/${showtimeId}`);
   }
 
-  getSeats(showtimeId: number): Observable<Seat[]> {
-    return of(this.generateSeats());
+  bookTickets(bookedData: any) {
+    return this.http.post(this.baseUrl + `/bookTickets?userId=${bookedData.userId}&showId=${bookedData.showId}&seatIds=${bookedData.seatIds}`, bookedData);
   }
 }
