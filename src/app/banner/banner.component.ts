@@ -12,8 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './banner.component.scss'
 })
 export class BannerComponent {
-  featuredMovies: Movie[] = [];
-  
+  featuredMovies: any = [];
+
   carouselOptions: OwlOptions = {
     loop: true,
     mouseDrag: true,
@@ -33,11 +33,23 @@ export class BannerComponent {
     autoplayHoverPause: true
   };
 
-  constructor(private movieService: MovieService) {}
+  constructor(private movieService: MovieService) { }
 
   ngOnInit() {
-    this.movieService.getFeaturedMovies().subscribe(movies => {
+
+  }
+  ngAfterViewInit(): void {
+    // Initialize Owl Carousel here
+    this.movieService.getMovies().subscribe((movies: any) => {
+      movies.forEach((e: any) => {
+        const randomParam = Math.floor(Math.random() * 10000000);  // Random number to ensure unique URL
+        // Construct the API URL with the random query parameter
+        const apiUrl = `https://picsum.photos/1920/1080?random=${randomParam}`;
+        // Update the image source with the new URL
+        e.bannerUrl = apiUrl;
+      });
       this.featuredMovies = movies;
+      this.featuredMovies.slice(0, 3)
     });
   }
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
 
 export interface User {
@@ -15,8 +16,11 @@ export interface User {
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
-  public currentUser: User | null = null;
+  constructor(private http: HttpClient, private router: Router) {
+    const userData = (localStorage.getItem('loggedIn'));
+    this.currentUser = userData ? JSON.parse(userData) : null;
+  }
+  public currentUser: any = null;
   private baseUrl = 'http://localhost:8080/api'
   login(email: string, password: string) {
     // Simulate API call
@@ -39,11 +43,20 @@ export class UserService {
     return throwError(() => new Error('Registration failed'));
   }
 
-  isLoggedIn(): boolean {
-    return !!this.currentUser;
+  isLoggedIn() {
+    const userData = (localStorage.getItem('loggedIn'));
+    this.currentUser = userData ? JSON.parse(userData) : null;
+    return this.currentUser;
   }
 
   logout(): void {
+    localStorage.clear();
     this.currentUser = null;
+    this.router.navigate(['/'])
+
+  }
+
+  bookings(id: any) {
+    return this.http.get(this.baseUrl + `/user-bookings/${id}`);
   }
 }

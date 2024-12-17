@@ -14,7 +14,7 @@
         <p><strong>Language:</strong> {{ movie.language }}</p>
         <p><strong>Release Date:</strong> {{ movie.releaseDate | date:'MMM dd YYYY' }}</p>
       </div>
-      @if (authService.isLoggedIn()) {
+      @if (authService.isLoggedIn().id) {
       <button class="btn btn-primary" [routerLink]="['/booking',movie.id]">Book Tickets</button>
       } @else {
       <button class="btn btn-primary" (click)="login()">Login to Book Tickets</button>

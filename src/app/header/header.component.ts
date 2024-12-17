@@ -11,8 +11,14 @@ import { UserService } from '../user.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  constructor(public authService: UserService) {}
+  currentUser: any;
+
+  constructor(public authService: UserService) { }
   logout() {
     this.authService.logout();
+  }
+  ngDoCheck() {
+    const userData = (localStorage.getItem('loggedIn'));
+    this.currentUser = userData ? JSON.parse(userData) : null;
   }
 }

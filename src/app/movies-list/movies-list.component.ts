@@ -20,13 +20,19 @@ export class MoviesListComponent {
   }
 
   getAllMovies() {
-    this.movieService.getMovies().subscribe(movies => {
+    this.movieService.getMovies().subscribe((movies: any) => {
+      movies.forEach((e: any) => {
+        const randomParam = Math.floor(Math.random() * 1000000);  // Random number to ensure unique URL
+        // Construct the API URL with the random query parameter
+        const apiUrl = `https://picsum.photos/300/400?random=${randomParam}`;
+        // Update the image source with the new URL
+        e.imageUrl = apiUrl;
+      });
       this.movies = movies;
     });
   }
   deleteMovie(id: number) {
     this.movieService.deleteMovie(id).subscribe((res: any) => {
-      console.log(res, "===");
       if (res.message) {
         alert("Movie Deleted Successfully");
         this.getAllMovies();
