@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class MovieDetailsComponent {
   movie?: any;
+  currentUser: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +33,10 @@ export class MovieDetailsComponent {
     if (this.movie) {
       this.router.navigate(['/booking', this.movie.id]);
     }
+  }
+  ngDoCheck() {
+    const userData = (localStorage.getItem('loggedIn'));
+    this.currentUser = userData ? JSON.parse(userData) : null;
   }
 
   login() {

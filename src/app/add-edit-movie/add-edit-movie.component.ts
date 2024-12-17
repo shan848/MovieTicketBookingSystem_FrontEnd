@@ -14,7 +14,7 @@ import { MovieService } from '../movie.service';
 export class AddEditMovieComponent {
   movieData = {
     movieName: '',
-    description: '000',
+    description: '',
     genre: '',
     duration: '',
     director: '',

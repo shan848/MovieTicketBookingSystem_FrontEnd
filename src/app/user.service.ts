@@ -23,24 +23,11 @@ export class UserService {
   public currentUser: any = null;
   private baseUrl = 'http://localhost:8080/api'
   login(email: string, password: string) {
-    // Simulate API call
     return this.http.post(this.baseUrl + '/login', { email, password })
-    // if (email === 'shan@gmail.com' && password === 'Password123!') {
-    //   this.currentUser = { id: 1, email, name: 'Demo User',age:24,mobileNo:'8798780' };
-    //   return of(this.currentUser);
-    // };
-    return throwError(() => new Error('Invalid credentials'));
   }
 
   register(email: string, password: string, name: string, age: number, mobileNo: string) {
-    // Simulate API call
-    // if (email && password && name & age & mobileNo) {
-    //   this.currentUser = { id: 1, email, name };
-    //   return of(this.currentUser);
-    // }
     return this.http.post(this.baseUrl + '/registerUser', { email, password, name, age, mobileNo })
-
-    return throwError(() => new Error('Registration failed'));
   }
 
   isLoggedIn() {
