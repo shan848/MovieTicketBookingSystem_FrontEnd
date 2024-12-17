@@ -8,7 +8,7 @@
             <!-- <p style="margin: 0 0 0.5rem; font-weight: bold;">{{ time?.showDate | date:'MMM dd YYYY' }} | {{
                 time.showTime }}</p> -->
             <div class="d-flex justify-content-btw align-item-center" style="gap: 10px;">
-                <a [routerLink]="['/edit-show',time.movieId, time.id]" class="btn btn-primary">Edit</a>
+                <a [routerLink]="['/edit-show',time.movieId.id, time.id]" class="btn btn-primary">Edit</a>
                 <a class="btn btn-danger" (click)="deleteShow(time.id)">Delete</a>
                 <a class="btn btn-secondary" (click)="location.back()">Back</a>
 

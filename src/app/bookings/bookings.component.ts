@@ -1,26 +1,31 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
-import { TitleCasePipe } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-bookings',
   standalone: true,
-  imports: [TitleCasePipe],
+  imports: [TitleCasePipe, CommonModule],
   templateUrl: './bookings.component.html',
   styleUrl: './bookings.component.scss'
 })
 export class BookingsComponent {
   public bookings: any;
+  currentUser: any;
   constructor(private router: Router, public bookingService: UserService) {
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.getAllBookings()
+  }
+  ngDoCheck() {
+    const userData = (localStorage.getItem('loggedIn'));
+    this.currentUser = userData ? JSON.parse(userData) : null;
   }
 
   getAllBookings() {
-    this.bookingService.bookings(this.bookingService.currentUser.id).subscribe((res: any) => {
+    this.bookingService.bookings(this.currentUser.id).subscribe((res: any) => {
       res.forEach((e: any) => {
         const randomParam = Math.floor(Math.random() * 1000000);  // Random number to ensure unique URL
         // Construct the API URL with the random query parameter

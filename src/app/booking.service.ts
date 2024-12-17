@@ -27,9 +27,6 @@ export class BookingService {
   constructor(private http: HttpClient) { }
   private baseUrl = 'http://localhost:8080/api';
 
-
-
-
   getShowTimes(movieId: number) {
     return this.http.get(this.baseUrl + `/getAllShowsByMovieId/${movieId}`);
   }
